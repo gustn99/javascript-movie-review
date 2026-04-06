@@ -2,14 +2,13 @@ import { Movie } from "../../apis/movie/api";
 import { getSearchedMovies } from "../../apis/search/api";
 import TMDBError from "../../TMDBError";
 import { renderResultSectionContent } from "./renderResultSectionContent";
-import { renderThumbnailList } from "./renderThumbnailList";
+import { ThumbnailList } from "../components/ThumbnailList";
 import { renderLoadingUI } from "./renderLoadingUI.ts";
 
 export const renderSearchUI = async (keyword: string) => {
   const searchInput = document.getElementById(
     "search-input",
   ) as HTMLInputElement;
-  const thumbnailListElement = document.getElementById("search-thumbnail-list");
   searchInput.value = keyword;
 
   let isError = false;
@@ -30,7 +29,12 @@ export const renderSearchUI = async (keyword: string) => {
 
     isLastPage = searchResult.page === searchResult.total_pages;
     movies = searchResult.results;
-    renderThumbnailList({ movies, thumbnailListElement });
+
+    const thumbnailList = new ThumbnailList(
+      document.getElementById("search-thumbnail-list-root"),
+      "search-thumbnail-list",
+    );
+    thumbnailList.render(movies);
   } catch (error) {
     isError = true;
     errorMessage = "🚨알 수 없는 에러가 발생했습니다.🚨";

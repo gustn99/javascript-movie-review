@@ -2,7 +2,7 @@ import { getPopularMovies, Movie } from "../../apis/movie/api";
 import TMDBError from "../../TMDBError";
 import { renderBanner } from "./renderBanner";
 import { renderResultSectionContent } from "./renderResultSectionContent";
-import { renderThumbnailList } from "./renderThumbnailList";
+import { ThumbnailList } from "../components/ThumbnailList";
 
 export const renderMainUI = async () => {
   let isError = false;
@@ -11,12 +11,16 @@ export const renderMainUI = async () => {
   let errorMessage = "";
 
   try {
-    const thumbnailListElement = document.getElementById("main-thumbnail-list");
     const popularMovies = await getPopularMovies({ language: "ko-KR" });
     isLastPage = popularMovies.page === popularMovies.total_pages;
     movies = popularMovies.results;
     renderBanner({ movie: movies[0] });
-    renderThumbnailList({ movies, thumbnailListElement });
+
+    const thumbnailList = new ThumbnailList(
+      document.getElementById("main-thumbnail-list-root"),
+      "main-thumbnail-list",
+    );
+    thumbnailList.render(movies);
   } catch (error) {
     isError = true;
     errorMessage = "🚨알 수 없는 에러가 발생했습니다.🚨";

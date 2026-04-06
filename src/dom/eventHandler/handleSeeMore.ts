@@ -1,9 +1,8 @@
 import { getPopularMovies } from "../../apis/movie/api";
 import { getSearchedMovies } from "../../apis/search/api";
-import { renderThumbnailList } from "../render/renderThumbnailList";
+import { ThumbnailList } from "../components/ThumbnailList";
 
 export const handleMainSeeMore = async () => {
-  const mainThumbnailList = document.getElementById("main-thumbnail-list");
   const url = new URL(window.location.href);
   const params = url.searchParams;
   const prevPage = Number(params.get("page") || 1);
@@ -17,14 +16,14 @@ export const handleMainSeeMore = async () => {
     language: "ko-KR",
   });
 
-  renderThumbnailList({
-    movies: movies.results,
-    thumbnailListElement: mainThumbnailList,
-  });
+  const thumbnailList = new ThumbnailList(
+    document.getElementById("main-thumbnail-list-root"),
+    "main-thumbnail-list",
+  );
+  thumbnailList.render(movies.results);
 };
 
 export const handleSearchSeeMore = async (keyword: string) => {
-  const mainThumbnailList = document.getElementById("search-thumbnail-list");
   const url = new URL(window.location.href);
   const params = url.searchParams;
   const prevPage = Number(params.get("page") || 1);
@@ -39,8 +38,9 @@ export const handleSearchSeeMore = async (keyword: string) => {
     language: "ko-KR",
   });
 
-  renderThumbnailList({
-    movies: movies.results,
-    thumbnailListElement: mainThumbnailList,
-  });
+  const thumbnailList = new ThumbnailList(
+    document.getElementById("search-thumbnail-list-root"),
+    "search-thumbnail-list",
+  );
+  thumbnailList.render(movies.results);
 };
