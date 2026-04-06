@@ -1,6 +1,6 @@
 import { getPopularMovies, Movie } from "../../apis/movie/api";
 import TMDBError from "../../TMDBError";
-import { renderBanner } from "./renderBanner";
+import { Banner } from "../components/Banner";
 import { renderResultSectionContent } from "./renderResultSectionContent";
 import { ThumbnailList } from "../components/ThumbnailList";
 
@@ -14,7 +14,9 @@ export const renderMainUI = async () => {
     const popularMovies = await getPopularMovies({ language: "ko-KR" });
     isLastPage = popularMovies.page === popularMovies.total_pages;
     movies = popularMovies.results;
-    renderBanner({ movie: movies[0] });
+
+    const banner = new Banner(document.getElementById("banner-root"));
+    banner.render(movies[0]);
 
     const thumbnailList = new ThumbnailList(
       document.getElementById("main-thumbnail-list-root"),
