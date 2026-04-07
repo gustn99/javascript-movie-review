@@ -10,6 +10,8 @@ export class ThumbnailList {
     this.#id = id;
   }
 
+  // TODO: loading 메서드 추가
+
   render(movies: Movie[]) {
     if (!this.#root) return;
 
@@ -25,6 +27,20 @@ export class ThumbnailList {
       .join("");
 
     this.#element.insertAdjacentHTML("beforeend", movieTemplates);
+  }
+
+  clear() {
+    if (this.#element) {
+      this.#element.innerHTML = "";
+    }
+  }
+
+  show() {
+    this.#element?.classList.remove("hidden");
+  }
+
+  hide() {
+    this.#element?.classList.add("hidden");
   }
 
   #createMovieTemplate(movie: Movie) {
@@ -49,19 +65,5 @@ export class ThumbnailList {
         </div>
       </li>
     `;
-  }
-
-  clear() {
-    if (this.#element) {
-      this.#element.innerHTML = "";
-    }
-  }
-
-  show() {
-    this.#element?.classList.remove("hidden");
-  }
-
-  hide() {
-    this.#element?.classList.add("hidden");
   }
 }

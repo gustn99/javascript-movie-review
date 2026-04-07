@@ -4,7 +4,7 @@ import {
   handleSearchSeeMore,
 } from "./dom/eventHandler/handleSeeMore";
 import { renderLoadingUI } from "./dom/render/renderLoadingUI.ts";
-import { renderMainUI } from "./dom/render/renderMainUI";
+import { Main } from "./dom/compositions/Main";
 import { renderSearchUI } from "./dom/render/renderSearchUI";
 
 const logo = document.getElementById("logo");
@@ -12,8 +12,6 @@ const searchInput = document.getElementById(
   "search-input",
 ) as HTMLInputElement | null;
 const searchButton = document.getElementById("search-button");
-const mainSeeMoreButton = document.getElementById("main-see-more-button");
-const searchSeeMoreButton = document.getElementById("search-see-more-button");
 
 if (logo) {
   logo.addEventListener("click", () => {
@@ -31,17 +29,25 @@ if (searchInput && searchButton) {
   });
 }
 
-if (mainSeeMoreButton) {
-  mainSeeMoreButton.addEventListener("click", () => {
+const main = new Main(
+  document.getElementById("main-root"),
+  document.getElementById("banner-root"),
+);
+
+// Main 내부에서 See More 버튼에 대한 리스너를 설정하기 위해 이벤트를 위임하거나 Main에 전달할 수 있습니다.
+// 여기서는 간단히 Main 인스턴스가 생성된 후 See More 버튼을 찾아 리스너를 추가하겠습니다.
+document
+  .getElementById("main-see-more-button")
+  ?.addEventListener("click", () => {
     handleMainSeeMore();
   });
-}
 
-if (searchSeeMoreButton && searchInput) {
-  searchSeeMoreButton.addEventListener("click", () => {
-    handleSearchSeeMore(searchInput.value);
+// Search UI도 클래스형으로 전환될 수 있지만, 현재는 기존 handleSearchSeeMore를 유지합니다.
+document
+  .getElementById("search-see-more-button")
+  ?.addEventListener("click", () => {
+    if (searchInput) handleSearchSeeMore(searchInput.value);
   });
-}
 
 const render = async () => {
   renderLoadingUI();
@@ -52,7 +58,7 @@ const render = async () => {
   if (keyword) {
     await renderSearchUI(keyword);
   } else {
-    await renderMainUI();
+    await main.render();
   }
 };
 
