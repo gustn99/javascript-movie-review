@@ -231,7 +231,7 @@ const createMyRateTemplate = (userRate) => {
   <div class="my-rate" id="${MY_RATE_ID}">
     <h3>내 별점</h3>
     <div>
-      <div class="rate-button-container" id="${RATE_BUTTON_CONTAINER_ID}"></div>
+      <div class="rate-button-container" id="${RATE_BUTTON_CONTAINER_ID}" aria-label="별점 ${userRate}점"></div>
       <span class="comment">${rateConfig?.comment}</span>
       <span class="score">(${rateConfig?.score}/10)</span>
     </div>
@@ -366,7 +366,7 @@ const createMovieItemTemplate = (movie) => `
       />
       <div class="item-desc">
         <p class="rate">
-          <img src="./images/star_empty.png" alt="" class="star" />
+          <img src="./images/star_empty.png" alt="별점" class="star" />
           <span>${movie.vote_average}</span>
         </p>
         <strong>${movie.title}</strong>
@@ -438,7 +438,7 @@ const createBannerTemplate = (movie) => `
     <div class="top-rated-container">
       <div class="top-rated-movie">
         <div class="rate">
-          <img class="star" src="./images/star_empty.png"/>
+          <img class="star" src="./images/star_empty.png" alt="별점"/>
           <span class="rate-value">${movie?.vote_average ?? "..."}</span>
         </div>
         <h3 class="title">${movie?.title ?? "정보를 불러오는 중..."}</h3>
