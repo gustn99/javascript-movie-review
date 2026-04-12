@@ -401,34 +401,34 @@ const removeMovieItemsLoading = (parent) => {
   const skeletons = parent.querySelectorAll(".skeleton");
   skeletons.forEach((skeleton) => skeleton.remove());
 };
-const MAIN_THUMBNAIL_LIST_ID = "main-thumbnail-list";
-let mainThumbnailList = null;
-const createMainThumbnailListTemplate = () => `
-  <ul class="thumbnail-list" id="${MAIN_THUMBNAIL_LIST_ID}"></ul>
+const POPULAR_THUMBNAIL_LIST_ID = "popular-thumbnail-list";
+let popularThumbnailList = null;
+const createPopularThumbnailListTemplate = () => `
+  <ul class="thumbnail-list" id="${POPULAR_THUMBNAIL_LIST_ID}"></ul>
 `;
-const renderMainThumbnailLoading = (parent) => {
-  if (mainThumbnailList) {
-    mainThumbnailList.remove();
+const renderPopularThumbnailLoading = (parent) => {
+  if (popularThumbnailList) {
+    popularThumbnailList.remove();
   }
-  parent.insertAdjacentHTML("beforeend", createMainThumbnailListTemplate());
-  mainThumbnailList = document.getElementById(MAIN_THUMBNAIL_LIST_ID);
-  if (mainThumbnailList) {
-    renderMovieItemsLoading(mainThumbnailList);
-  }
-};
-const renderMainThumbnailList = (parent, movies) => {
-  if (mainThumbnailList) {
-    mainThumbnailList.remove();
-  }
-  parent.insertAdjacentHTML("beforeend", createMainThumbnailListTemplate());
-  mainThumbnailList = document.getElementById(MAIN_THUMBNAIL_LIST_ID);
-  if (mainThumbnailList && movies.length > 0) {
-    renderMovieItems(mainThumbnailList, movies);
+  parent.insertAdjacentHTML("beforeend", createPopularThumbnailListTemplate());
+  popularThumbnailList = document.getElementById(POPULAR_THUMBNAIL_LIST_ID);
+  if (popularThumbnailList) {
+    renderMovieItemsLoading(popularThumbnailList);
   }
 };
-const removeMainThumbnailList = () => {
-  mainThumbnailList?.remove();
-  mainThumbnailList = null;
+const renderPopularThumbnailList = (parent, movies) => {
+  if (popularThumbnailList) {
+    popularThumbnailList.remove();
+  }
+  parent.insertAdjacentHTML("beforeend", createPopularThumbnailListTemplate());
+  popularThumbnailList = document.getElementById(POPULAR_THUMBNAIL_LIST_ID);
+  if (popularThumbnailList && movies.length > 0) {
+    renderMovieItems(popularThumbnailList, movies);
+  }
+};
+const removePopularThumbnailList = () => {
+  popularThumbnailList?.remove();
+  popularThumbnailList = null;
 };
 const BANNER_ID = "background-container";
 let bannerElement = null;
@@ -477,11 +477,11 @@ const removeBanner = () => {
   bannerElement?.remove();
   bannerElement = null;
 };
-const MAIN_OBSERVER_TARGET_ID = "main-observer-target";
-let mainObserver = null;
-let mainObserverTarget = null;
-const renderMain = (isLastPage, movies) => {
-  removeMain();
+const HOME_OBSERVER_TARGET_ID = "home-observer-target";
+let homeObserver = null;
+let homeObserverTarget = null;
+const renderHome = (isLastPage, movies) => {
+  removeHome();
   removeSearch();
   const header = document.querySelector("header");
   if (header) {
@@ -489,15 +489,15 @@ const renderMain = (isLastPage, movies) => {
   }
   const resultSection = document.getElementById("result-section");
   if (!resultSection) return;
-  renderMainThumbnailList(resultSection, movies);
+  renderPopularThumbnailList(resultSection, movies);
   if (!isLastPage) {
     observeTarget$1(resultSection, () => {
       handleMainSeeMore();
     });
   }
 };
-const renderMainLoading = () => {
-  removeMain();
+const renderHomeLoading = () => {
+  removeHome();
   removeSearch();
   const header = document.querySelector("header");
   if (header) {
@@ -505,11 +505,11 @@ const renderMainLoading = () => {
   }
   const resultSection = document.getElementById("result-section");
   if (resultSection) {
-    renderMainThumbnailLoading(resultSection);
+    renderPopularThumbnailLoading(resultSection);
   }
 };
-const renderMainError = (errorMessage) => {
-  removeMain();
+const renderHomeError = (errorMessage) => {
+  removeHome();
   removeSearch();
   const resultSection = document.getElementById("result-section");
   if (resultSection) {
@@ -519,8 +519,8 @@ const renderMainError = (errorMessage) => {
     );
   }
 };
-const renderMainEmpty = () => {
-  removeMain();
+const renderHomeEmpty = () => {
+  removeHome();
   removeSearch();
   const resultSection = document.getElementById("result-section");
   if (resultSection) {
@@ -529,38 +529,40 @@ const renderMainEmpty = () => {
 };
 const appendPopularMovies = (isLastPage, movies) => {
   const resultSection = document.getElementById("result-section");
-  const mainThumbnailList2 = document.getElementById("main-thumbnail-list");
-  if (!resultSection || !mainThumbnailList2) return;
+  const popularThumbnailList2 = document.getElementById(
+    "popular-thumbnail-list"
+  );
+  if (!resultSection || !popularThumbnailList2) return;
   removeObserverTarget$1();
-  removeMovieItemsLoading(mainThumbnailList2);
-  renderMovieItems(mainThumbnailList2, movies);
+  removeMovieItemsLoading(popularThumbnailList2);
+  renderMovieItems(popularThumbnailList2, movies);
   if (!isLastPage) {
     observeTarget$1(resultSection, () => {
       handleMainSeeMore();
     });
   }
 };
-const removeMain = () => {
-  mainObserver?.disconnect();
-  mainObserver = null;
+const removeHome = () => {
+  homeObserver?.disconnect();
+  homeObserver = null;
   removeObserverTarget$1();
   removeBanner();
-  removeMainThumbnailList();
+  removePopularThumbnailList();
   removeErrorContainer();
   removeEmptyContainer();
 };
 const observeTarget$1 = (parent, onIntersect) => {
-  mainObserver?.disconnect();
+  homeObserver?.disconnect();
   parent.insertAdjacentHTML(
     "beforeend",
-    `<div id="${MAIN_OBSERVER_TARGET_ID}" class="observer-target"></div>`
+    `<div id="${HOME_OBSERVER_TARGET_ID}" class="observer-target"></div>`
   );
-  mainObserverTarget = document.getElementById(MAIN_OBSERVER_TARGET_ID);
-  if (!mainObserverTarget) return;
-  mainObserver = new IntersectionObserver(
+  homeObserverTarget = document.getElementById(HOME_OBSERVER_TARGET_ID);
+  if (!homeObserverTarget) return;
+  homeObserver = new IntersectionObserver(
     (entries) => {
       if (entries[0].isIntersecting) {
-        mainObserver?.disconnect();
+        homeObserver?.disconnect();
         onIntersect();
       }
     },
@@ -569,11 +571,11 @@ const observeTarget$1 = (parent, onIntersect) => {
       threshold: 0.1
     }
   );
-  mainObserver.observe(mainObserverTarget);
+  homeObserver.observe(homeObserverTarget);
 };
 const removeObserverTarget$1 = () => {
-  mainObserverTarget?.remove();
-  mainObserverTarget = null;
+  homeObserverTarget?.remove();
+  homeObserverTarget = null;
 };
 const renderHomePage = async (type) => {
   let isError = false;
@@ -583,7 +585,7 @@ const renderHomePage = async (type) => {
   const page = Number(sessionStorage.getItem("page") || 1);
   try {
     if (type === "init") {
-      renderMainLoading();
+      renderHomeLoading();
     }
     const popularMovies = await getPopularMovies({
       language: "ko-KR",
@@ -600,11 +602,11 @@ const renderHomePage = async (type) => {
   } finally {
     if (type === "init") {
       if (isError) {
-        renderMainError(errorMessage);
+        renderHomeError(errorMessage);
       } else if (movies.length === 0) {
-        renderMainEmpty();
+        renderHomeEmpty();
       } else if (type === "init") {
-        renderMain(isLastPage, movies);
+        renderHome(isLastPage, movies);
       }
     }
     if (type === "append") {
@@ -659,7 +661,7 @@ const SEARCH_OBSERVER_TARGET_ID = "search-observer-target";
 let searchObserver = null;
 let searchObserverTarget = null;
 const renderSearch = (isLastPage, movies) => {
-  removeMain();
+  removeHome();
   removeSearch();
   const resultSection = document.getElementById("result-section");
   if (!resultSection) return;
@@ -671,7 +673,7 @@ const renderSearch = (isLastPage, movies) => {
   }
 };
 const renderSearchLoading = (keyword) => {
-  removeMain();
+  removeHome();
   removeSearch();
   const resultSection = document.getElementById("result-section");
   const subTitle = document.getElementById("sub-title");
@@ -684,7 +686,7 @@ const renderSearchLoading = (keyword) => {
   }
 };
 const renderSearchError = (errorMessage) => {
-  removeMain();
+  removeHome();
   removeSearch();
   const resultSection = document.getElementById("result-section");
   if (resultSection) {
@@ -695,7 +697,7 @@ const renderSearchError = (errorMessage) => {
   }
 };
 const renderSearchEmpty = () => {
-  removeMain();
+  removeHome();
   removeSearch();
   const resultSection = document.getElementById("result-section");
   if (resultSection) {
