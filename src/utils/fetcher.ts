@@ -6,7 +6,7 @@ export const fetcher = async <T, U>(
     method: "GET",
     ...options,
     headers: {
-      contentType: "application/json",
+      "Content-Type": "application/json",
       ...options.headers,
     },
   };
